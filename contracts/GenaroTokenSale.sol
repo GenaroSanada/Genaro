@@ -26,6 +26,7 @@ contract GenaroTokenSale is Controller, SafeMath {
 
     uint constant public dust = 1 finney;         // Minimum investment
     uint constant public maxPerPersion = 100 ether;   // Maximum investment per person
+    uint constant public tokenPrice = 14000;    // Genaro token price
     uint public hardCap = 14700 ether;          // Hard cap for Genaro 
 
     event NewPresaleAllocation(address indexed holder, uint256 gnrAmount);
@@ -37,7 +38,7 @@ contract GenaroTokenSale is Controller, SafeMath {
 /// @param _finalBlock The Block number in which the sale ends
 /// @param _genaroDevMultisig The address that will store the donated funds and manager
 /// for the sale
-/// @param Price The price for the first stage of the sale. Price in wei-GNR per wei.
+/// @param _price The price for the genaro sale. Price in wei-GNR per wei.
 
   function GenaroTokenSale (
       uint _initialBlock,
@@ -50,7 +51,6 @@ contract GenaroTokenSale is Controller, SafeMath {
       require(_genaroDevMultisig !=0);
       require(_initialBlock >= getBlockNumber());
       require(_initialBlock < _finalBlock);
-      require(_initialPrice > _finalPrice);
 
       require(uint(_capCommitment)!=0);
       
@@ -124,28 +124,8 @@ contract GenaroTokenSale is Controller, SafeMath {
   function getPrice(uint _blockNumber) constant public returns (uint256) {
     if (_blockNumber < initialBlock || _blockNumber >= finalBlock) return 0;
 
-    return priceForStage(stageForBlock(_blockNumber));
-  }
-
-  // @notice Get what the stage is for a given blockNumber
-  // @param _blockNumber: Block number
-  // @return The sale stage for that block. Stage is between 0 and (priceStages - 1)
-  function stageForBlock(uint _blockNumber) constant internal returns (uint8) {
-    uint blockN = safeSub(_blockNumber, initialBlock);
-    uint totalBlocks = safeSub(finalBlock, initialBlock);
-
-    return uint8(safeDiv(safeMul(priceStages, blockN), totalBlocks));
-  }
-
-  // @notice Get what the price is for a given stage
-  // @param _stage: Stage number
-  // @return Price in wei for that stage.
-  // If sale stage doesn't exist, returns 0.
-  function priceForStage(uint8 _stage) constant internal returns (uint256) {
-    if (_stage >= priceStages) return 0;
-    uint priceDifference = safeSub(initialPrice, finalPrice);
-    uint stageDelta = safeDiv(priceDifference, uint(priceStages - 1));
-    return safeSub(initialPrice, safeMul(uint256(_stage), stageDelta));
+    //return priceForStage(stageForBlock(_blockNumber));
+    return tokenPrice;
   }
 
   // @notice Genaro Dev needs to make initial token allocations for presale partners

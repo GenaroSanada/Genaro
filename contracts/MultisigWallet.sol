@@ -25,7 +25,7 @@ contract MultiSigWallet {
     uint public required;
     uint public transactionCount;
 
-    struct Transaction {
+    struct  Transaction {
         address destination;
         uint value;
         bytes data;
@@ -68,17 +68,15 @@ contract MultiSigWallet {
     }
 
     modifier notNull(address _address) {
-        if (_address == 0)
-            throw;
+        require(_address !=0);
         _;
     }
 
     modifier validRequirement(uint ownerCount, uint _required) {
-        if (   ownerCount > MAX_OWNER_COUNT
-            || _required > ownerCount
-            || _required == 0
-            || ownerCount == 0)
-            throw;
+        require(ownerCount <= MAX_OWNER_COUNT 
+                && _required <= ownerCount
+                && _required != 0
+                && ownerCount != 0);
         _;
     }
 
@@ -101,8 +99,7 @@ contract MultiSigWallet {
         validRequirement(_owners.length, _required)
     {
         for (uint i=0; i<_owners.length; i++) {
-            if (isOwner[_owners[i]] || _owners[i] == 0)
-                throw;
+            assert(!isOwner[_owners[i]] && _owners[i] != 0); 
             isOwner[_owners[i]] = true;
         }
         owners = _owners;
@@ -218,7 +215,7 @@ contract MultiSigWallet {
         notExecuted(transactionId)
     {
         if (isConfirmed(transactionId)) {
-            Transaction tx = transactions[transactionId];
+            Transaction storage tx = transactions[transactionId];
             tx.executed = true;
             if (tx.destination.call.value(tx.value)(tx.data))
                 Execution(transactionId);

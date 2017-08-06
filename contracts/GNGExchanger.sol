@@ -3,7 +3,7 @@ pragma solidity ^0.4.13;
 import "./interface/Owned.sol";
 import "./interface/Controller.sol";
 import "zeppelin/SafeMath.sol";
-//import "./GenaroTokenSale.sol";
+import "./GenaroTokenSale.sol";
 import "./GNR.sol";
 import "./GNG.sol";
 import "./MiniMeToken.sol";
@@ -14,33 +14,27 @@ contract GNGExchanger is Controller, Owned, SafeMath {
 	GNG public gng;
 	GNR public gnr;
 
-//	GenaroTokenSale public genaroTokenSale;
+	GenaroTokenSale public genaroTokenSale;
 
-//	function GNGExchanger(address _gng, address _gnr, address _genaroTokenSale){
-//		gng = GNG(_gng);
-//		gnr = GNR(_gnr);
-//		genaroTokenSale = genaroTokenSale(_genaroTokenSale);
-//	}
-
-	function GNGExchanger(address _gng, address _gnr){
+	function GNGExchanger(address _gng, address _gnr, address _genaroTokenSale){
 		gng = GNG(_gng);
 		gnr = GNR(_gnr);
-	}	
+		genaroTokenSale = GenaroTokenSale(_genaroTokenSale);
+	}
 
 	/// @notice This method should be called by GNG holders to collect their 
 	///	corresponding GNR
 
 	function collect() public{
 
-//		uint256 finalizedBl ock = genaroTokenSale.finalizedBlock();
+		uint256 finalizedBlock = genaroTokenSale.finalBlock();
 
-//		require(finalizedBlock !=0);
-//		require(getBlockNumber()>finalizedBlock);
-
-//		uint256 balance = gng.balanceOfAt(msg.sender,finalizedBlock);
+		require(finalizedBlock !=0);
+		require(getBlockNumber()>finalizedBlock);
 		
-		require(gng.transfersEnabled);
-		uint256 balance = gng.balanceOf(msg.sender);
+		require(gng.transfersEnabled());
+
+		uint256 balance = gng.balanceOfAt(msg.sender,finalizedBlock);
 
 		/// @notice the decimals of GNG is 1 and the decimals of of GNR is 9 so the amount 
 		/// of GNG should multiply by 10 ** 8 to get GNR amount;

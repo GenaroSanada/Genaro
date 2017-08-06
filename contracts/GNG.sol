@@ -25,8 +25,7 @@ contract GNG is MiniMeToken{
         for (uint i = 0; i < data.length; i++ ) {
             address addr = address( data[i] & (D160-1) );
             uint amount = data[i] / D160;
-
-            if (!generateTokens(addr, amount)) throw;
+            assert(generateTokens(addr,amount));
         }
     }
 

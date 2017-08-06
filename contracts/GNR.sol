@@ -14,9 +14,9 @@ contract GNR is MiniMeIrrevocableVestedToken {
     _tokenFactory,
     0x0,                    // no parent token
     0,                      // no snapshot block number from parent
-    "Gen Network Token", // Token name
+    "Genaro Network Token", // Token name
     9,                     // Decimals
-    "GER",                  // Symbol
+    "GNR",                  // Symbol
     true                    // Enable transfers
     ) {}
 }

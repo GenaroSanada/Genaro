@@ -125,11 +125,6 @@ contract MiniMeIrrevocableVestedToken is MiniMeToken, SafeMath {
     cliff = grant.cliff;
     vesting = grant.vesting;
 
-    // remove grant from array
- //   delete grants[_holder][_grantId];
- //   grants[_holder][_grantId] = grants[_holder][grants[_holder].length.sub(1)];
- //   grants[_holder].length -= 1;
-
     vested = vestedTokens(grant, uint64(now));
   }
 
