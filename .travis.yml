@@ -5,7 +5,7 @@ language: node_js
 node_js:
   - "7"
 before_install:
-  - npm install truffle@3.1.9 -g
+  - npm install truffle@3.4.6 -g
   - npm i -g ethereumjs-testrpc
 script:
   - testrpc -l 100000000 -i 15 > /dev/null &
