@@ -1,7 +1,7 @@
 pragma solidity ^0.4.13;
 
 // @dev Contract to hold sale raised funds during the sale period.
-// Prevents attack in which the Aragon Multisig sends raised ether
+// Prevents attack in which the Genaro Multisig sends raised ether
 // to the sale contract to mint tokens to itself, and getting the
 // funds back immediately.
 

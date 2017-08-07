@@ -1,0 +1,4 @@
+node_modules/
+build/
+password
+package-lock.json

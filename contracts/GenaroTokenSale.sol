@@ -6,7 +6,7 @@ import "./GNR.sol";
 import "./GRPlaceholder.sol";
 import "./SaleWallet.sol";
 
-contract GenaroTokenSale is Controller, SafeMath {
+contract GenaroTokenSale is Controlled, Controller, SafeMath {
     uint public initialBlock;             // Block number in which the sale starts. Inclusive. sale will be opened at initial block.
     uint public finalBlock;               // Block number in which the sale end. Exclusive, sale will be closed at ends block.
     uint public price;                    // Number of wei-GNR tokens for 1 wei, at the start of the sale (9 decimals) 
@@ -20,13 +20,18 @@ contract GenaroTokenSale is Controller, SafeMath {
 
     mapping (address => bool) public activated;   // Address confirmates that wants to activate the sale
 
+    mapping (address => bool) public whitelist;   // Address consists of whitelist payer
+
     GNR public token;                             // The token
     GRPlaceholder public networkPlaceholder;      // The network placeholder
     SaleWallet public saleWallet;                 // Wallet that receives all sale funds
 
     uint constant public dust = 1 finney;         // Minimum investment
     uint constant public maxPerPersion = 100 ether;   // Maximum investment per person
+
     uint constant public tokenPrice = 14000;    // Genaro token price
+    uint constant public whitelistTokenPrice = 11200;  //Genaro whitelist price
+
     uint public hardCap = 14700 ether;          // Hard cap for Genaro 
 
     event NewPresaleAllocation(address indexed holder, uint256 gnrAmount);
@@ -121,11 +126,10 @@ contract GenaroTokenSale is Controller, SafeMath {
   // @return Number of wei-GNR for 1 wei
   // If sale isn't ongoing for that block, returns 0.
 
-  function getPrice(uint _blockNumber) constant public returns (uint256) {
+  function getPrice(address _owner, uint _blockNumber) constant public returns (uint256) {
     if (_blockNumber < initialBlock || _blockNumber >= finalBlock) return 0;
 
-    //return priceForStage(stageForBlock(_blockNumber));
-    return tokenPrice;
+    return (whitelist[_owner]? whitelistTokenPrice :tokenPrice);
   }
 
   // @notice Genaro Dev needs to make initial token allocations for presale partners
@@ -159,6 +163,27 @@ contract GenaroTokenSale is Controller, SafeMath {
   function () public payable {
     return doPayment(msg.sender);
   }
+
+/////////////////
+// Whitelist  controll
+/////////////////
+
+  function addToWhiteList(address _owner) 
+           only(controller)
+           public{
+              whitelist[_owner]=true;
+           }
+
+  function removeFromWhiteList(address _owner)
+           only(controller)
+           public{
+              whitelist[_owner]=false;
+           }
+
+  // @return true if investor is whitelisted
+  function isWhitelisted(address _owner) public constant returns (bool) {
+    return whitelist[_owner];
+  }           
 
 /////////////////
 // Controller interface
@@ -211,7 +236,7 @@ contract GenaroTokenSale is Controller, SafeMath {
 
     assert(totalCollected+msg.value <= hardCap); //if past hard cap, throw
 
-    uint256 boughtTokens = safeMul(msg.value, getPrice(getBlockNumber())); // Calculate how many tokens bought
+    uint256 boughtTokens = safeMul(msg.value, getPrice(_owner,getBlockNumber())); // Calculate how many tokens bought
 
     assert(saleWallet.send(msg.value));  //Send fund to multisig
     assert(token.generateTokens(_owner,boughtTokens));// Allocate tokens. This will fail after sale is finalized in case it is hidden cap finalized.
