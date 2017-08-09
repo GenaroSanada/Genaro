@@ -6,12 +6,12 @@ var SaleWallet = artifacts.require("SaleWallet");
 
 
 module.exports = function(deployer, network, accounts) {
-  if (network.indexOf('dev') > -1) return // dont deploy on tests
+  // if (network.indexOf('dev') > -1) return // dont deploy on tests
 
   const genaroMulSig =    '0x46aF1e065eDfdC4E6C2c0c8a4361ae68776Cb375'  //may change later
 
-  const initialBlock = 4168023        //  Aug. 17 initialBlock
-  const finalBlock =   4209087        //  finalBlock
+  const initialBlock = 4169220        //  Aug. 17 initialBlock
+  const finalBlock =   4222572        //  finalBlock
 
   deployer.deploy(MiniMeTokenFactory);
   deployer.deploy(GenaroTokenSale, initialBlock, finalBlock, genaroMulSig, 14000 , '0x9f1c7e5452f0a10a2e2cde94d82e8d9e3204c4d012b7396127fc304d6dcac414')

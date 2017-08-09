@@ -6,8 +6,9 @@ import './GenaroTokenSaleMock.sol';
 // As it also deploys MiniMeTokenFactory, nonce will increase and therefore will be broken for future deployments
 
 contract GenaroTokenSaleTokenMock is GenaroTokenSaleMock {
+
   function GenaroTokenSaleTokenMock(address initialAccount, uint initialBalance)
-    GenaroTokenSaleMock(10, 20, msg.sender, msg.sender, 100, 50, 2)
+          GenaroTokenSaleMock(10, 20, msg.sender, msg.sender, 100, 50, 2)
     {
       GNR token = new GNR(new MiniMeTokenFactory());
       GRPlaceholder networkPlaceholder = new GRPlaceholder(this, token);

@@ -3,10 +3,13 @@ sudo: false
 group: beta
 language: node_js
 node_js:
-  - "7"
+  - "8"
+cache:
+  yarn: true  
 before_install:
   - npm install truffle@3.4.6 -g
   - npm i -g ethereumjs-testrpc
+
 script:
-  - testrpc -l 100000000 -i 15 > /dev/null &
-  - truffle test
+  - yarn test
+

@@ -1,9 +1,8 @@
-// Slightly modified Zeppelin tests for ERC20 VestedToken.
-
 const assertJump = require('./helpers/assertJump');
-var GenaroTokenSaleTokenMock = artifacts.require("GenaroTokenSaleTokenMock");
-var MiniMeIrrevocableVestedToken = artifacts.require("MiniMeIrrevocableVestedToken");
 const timer = require('./helpers/timer');
+var GenaroTokenSaleTokenMock = artifacts.require("./helpers/GenaroTokenSaleTokenMock.sol");
+var MiniMeIrrevocableVestedToken = artifacts.require("MiniMeIrrevocableVestedToken");
+
 
 contract('MiniMeIrrevocableVestedToken', function(accounts) {
   let token = null
@@ -21,7 +20,10 @@ contract('MiniMeIrrevocableVestedToken', function(accounts) {
   })
 
   it('granter can grant tokens without vesting', async () => {
-    await token.transfer(receiver, tokenAmount, { from: granter })
+    await token.transfer(receiver, tokenAmount, { from: granter });
+
+    const balance = await token.balanceOf(receiver);
+    const amount  = await token.transferableTokens(receiver, now);
 
     assert.equal(await token.balanceOf(receiver), tokenAmount);
     assert.equal(await token.transferableTokens(receiver, now), tokenAmount);
@@ -53,8 +55,8 @@ contract('MiniMeIrrevocableVestedToken', function(accounts) {
   })
 
   describe('getting a token grant', async () => {
-    const cliff = 15000
-    const vesting = 30000 // seconds
+    const cliff = 10000
+    const vesting = 20000 // seconds
 
     beforeEach(async () => {
       await token.grantVestedTokens(receiver, tokenAmount, now, now + cliff, now + vesting, { from: granter })

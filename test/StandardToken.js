@@ -1,23 +1,34 @@
-// Zeppelin tests for ERC20 StandardToken.
+
+'use strict';
 
 const assertJump = require('./helpers/assertJump');
 const assertGas = require('./helpers/assertGas');
 var StandardToken = artifacts.require("MiniMeToken");
 var TokenReceiverMock = artifacts.require("TokenReceiverMock");
 var GenaroTokenSaleTokenMock = artifacts.require("GenaroTokenSaleTokenMock");
-
+var expect = require("chai").expect;
 
 
 contract('StandardToken', function(accounts) {
   let token;
-  beforeEach(async () => {
-    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 70) // 30 extra tokens are 30% extra at sale end
-    token = StandardToken.at(await sale.token())
+
+  beforeEach(async function() {
+
+    console.log("before all base");
+
+    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 70); // 30 extra tokens are 30% extra at sale end
+    token = StandardToken.at(await sale.token());
   })
 
   it("should return the correct totalSupply after construction", async function() {
-    let totalSupply = await token.totalSupply();
 
+
+    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 70); // 30 extra tokens are 30% extra at sale end
+    token = StandardToken.at(await sale.token());
+
+    let totalSupply = await token.totalSupply();
+    var expected = 100;
+    // expect(parseInt(totalSupply)).to.equal(expected);
     assert.equal(totalSupply, 100);
   })
 

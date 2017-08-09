@@ -24,6 +24,7 @@ contract TestMiniMeCloning {
   // sequencially and may interact with each other.
 
   function testHasTokens() {
+
     Assert.equal(token.balanceOf(this), 100, 'should have tokens');
   }
 

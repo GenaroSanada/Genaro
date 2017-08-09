@@ -14,6 +14,7 @@ contract TestTokenSale {
 
   ThrowProxy throwProxy;
 
+
   function beforeAll() {
     factory = address(new MiniMeTokenFactory());
   }
@@ -29,7 +30,6 @@ contract TestTokenSale {
     GenaroTokenSaleMock sale = new GenaroTokenSaleMock(10, 20, address(ms), address(ms), 3, 1, 2);
     ms.deployAndSetGNR(sale);
     ms.activateSale(sale);
-
     sale.setMockedBlockNumber(12);
     Assert.isTrue(sale.proxyPayment.value(25 finney)(address(this)), 'proxy payment should succeed'); // Gets 5 @ 10 finney
     Assert.equal(sale.totalCollected(), 25 finney, 'Should have correct total collected');
