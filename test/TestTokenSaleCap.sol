@@ -120,8 +120,8 @@ contract TestTokenSaleCap {
     sale.setMockedBlockNumber(21);
     ms.finalizeSale(sale);
 
-    Assert.equal(ERC20(sale.token()).balanceOf(address(ms)), 30 finney, 'Should have correct balance after ending sale');
-    Assert.equal(ERC20(sale.token()).totalSupply(), 100 finney, 'Should have correct supply after ending sale');
+    Assert.equal(ERC20(sale.token()).balanceOf(address(ms)), 0 finney, 'Should have correct balance after ending sale');
+    Assert.equal(ERC20(sale.token()).totalSupply(), 70 finney, 'Should have correct supply after ending sale');
   }
 
   function testTokensAreTransferrableAfterSale() {
@@ -161,19 +161,4 @@ contract TestTokenSaleCap {
     Assert.equal(sale.saleWallet().balance, 0 finney, "Funds shouldnt have been transfered");
   }
 
-  function testFundsAreLockedDuringSale() {
-    MultisigMock ms = new MultisigMock();
-    GenaroTokenSaleMock sale = new GenaroTokenSaleMock(1000000, 60000000, address(ms), address(ms), 3, 1, 2);
-    ms.deployAndSetGNR(sale);
-    ms.activateSale(sale);
-
-    Assert.equal(GNR(sale.token()).controller(), address(sale), "Sale is controller during sale");
-
-    sale.setMockedBlockNumber(1000000);
-    sale.proxyPayment.value(15 finney)(address(this));
-
-    ms.withdrawWallet(sale);
-    Assert.equal(ms.balance, 0 finney, "Funds shouldnt have been transfered");
-    Assert.equal(sale.saleWallet().balance, 15 finney, "Funds shouldnt have been transfered");
-  }
 }

@@ -34,7 +34,10 @@
     "async": "^2.4.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "ethconnector": "0.0.25",
+    "ethjs-contract": "^0.1.9",
+    "ethjs-provider-http": "^0.1.6",
     "moment": "^2.18.1",
+    "truffle-contract": "^2.0.5",
     "truffle-hdwallet-provider": "0.0.3"
   }
 }

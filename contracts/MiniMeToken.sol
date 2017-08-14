@@ -143,12 +143,13 @@ contract MiniMeToken is ERC20, Controlled {
            }
 
            // Do not allow transfer to 0x0 or the token contract itself
-           require((_to>0)&&(_to!=address(this)));
+           require((_to!=0)&&(_to!=address(this)));
 
            //// if ((_to == 0) || (_to == address(this))) throw;
 
            // If the amount being transfered is more than the balance of the
            //  account the transfer returns false
+
            var previousBalanceFrom = balanceOfAt(_from, block.number);
            assert(previousBalanceFrom >= _amount);
 
@@ -164,6 +165,7 @@ contract MiniMeToken is ERC20, Controlled {
 
            // Then update the balance array with the new value for the address
            //  receiving the tokens
+           
            var previousBalanceTo = balanceOfAt(_to, block.number);
            assert(previousBalanceTo+_amount>=previousBalanceTo); 
            
@@ -195,6 +197,7 @@ contract MiniMeToken is ERC20, Controlled {
         //  allowance to zero by calling `approve(_spender,0)` if it is not
         //  already 0 to mitigate the race condition described here:
         //  https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+
         require((_amount==0)||(allowed[msg.sender][_spender]==0));
 
         // Alerts the token controller of the approve function call

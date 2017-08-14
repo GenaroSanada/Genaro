@@ -29,8 +29,7 @@ contract GenaroTokenSale is Controlled, Controller, SafeMath {
     uint constant public dust = 1 finney;         // Minimum investment
     uint constant public maxPerPersion = 100 ether;   // Maximum investment per person
 
-    uint constant public tokenPrice = 14000;    // Genaro token price
-    uint constant public whitelistTokenPrice = 11200;  //Genaro whitelist price
+    uint constant public tokenPrice = 7680;    // Genaro token price
 
     uint public hardCap = 14700 ether;          // Hard cap for Genaro 
 
@@ -129,7 +128,8 @@ contract GenaroTokenSale is Controlled, Controller, SafeMath {
   function getPrice(address _owner, uint _blockNumber) constant public returns (uint256) {
     if (_blockNumber < initialBlock || _blockNumber >= finalBlock) return 0;
 
-    return (whitelist[_owner]? whitelistTokenPrice :tokenPrice);
+    return (price);
+    //return (tokenPrice);
   }
 
   // @notice Genaro Dev needs to make initial token allocations for presale partners
@@ -302,8 +302,9 @@ contract GenaroTokenSale is Controlled, Controller, SafeMath {
     // and the generateTokens call will fail if called again.
 
     // Genaro Dev owns 5% of the total number of emitted tokens at the end of the sale.
-    uint256 genaroTokens = token.totalSupply() * 1 / 20; 
-    assert(token.generateTokens(genaroDevMultisig,genaroTokens));
+    
+    // uint256 genaroTokens = token.totalSupply() * 1 / 20; 
+    // assert(token.generateTokens(genaroDevMultisig,genaroTokens));
 
     token.changeController(networkPlaceholder); // Sale loses token controller power in favor of network placeholder
 
@@ -374,7 +375,7 @@ contract GenaroTokenSale is Controlled, Controller, SafeMath {
   }
 
   modifier only_sale_not_stopped {
-    require(saleStopped);
+    require(!saleStopped);
     _;
   }
 

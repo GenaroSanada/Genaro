@@ -14,6 +14,10 @@ testrpc_running() {
   nc -z localhost 8545
 }
 
+
+
+node_modules/.bin/truffle compile --reset
+
 if testrpc_running; then
   echo "Using existing testrpc instance"
 else

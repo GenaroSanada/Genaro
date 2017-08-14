@@ -31,9 +31,11 @@ contract('MiniMeIrrevocableVestedToken', function(accounts) {
 
   it('cannot create token grants after losing whitelisting ability', async () => {
     await token.changeVestingWhitelister(accounts[2]);
+
     try {
       await token.grantVestedTokens(receiver, tokenAmount, now, now + 10000, now + 20000, { from: granter })
     } catch(error) {
+      console.log(error);
       return assertJump(error);
     }
   })
@@ -50,6 +52,7 @@ contract('MiniMeIrrevocableVestedToken', function(accounts) {
     try {
       await token.setCanCreateGrants(accounts[2], true, { from: accounts[0] });
     } catch(error) {
+      console.log(error);
       return assertJump(error);
     }
   })
@@ -91,14 +94,6 @@ contract('MiniMeIrrevocableVestedToken', function(accounts) {
         return assertJump(error);
       }
       assert.fail('should have thrown before');
-    })
-
-    it('cannot be revoked', async () => {
-      try {
-        await token.revokeTokenGrant(receiver, 0, { from: granter });
-      } catch(error) {
-        return assertJump(error);
-      }
     })
 
     it('can transfer all tokens after vesting ends', async () => {

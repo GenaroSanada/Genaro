@@ -1,4 +1,4 @@
-# Genaro Network Token[![Build Status](https://travis-ci.org/GenaroSanada/Genaro.svg?branch=master)](https://travis-ci.org/GenaroSanada/Genaro)
+# Genaro Network Token  [![Build Status](https://travis-ci.org/GenaroSanada/Genaro.svg?branch=master)](https://travis-ci.org/GenaroSanada/Genaro)
 
 
 <img src="resource/header.png"/>

@@ -82,7 +82,9 @@ contract MiniMeIrrevocableVestedToken is MiniMeToken, SafeMath {
     uint64 _vesting) public {
 
     // Check start, cliff and vesting are properly order to ensure correct functionality of the formula.
+
     require(_cliff >= _start && _vesting >= _cliff);
+    
     require(tokenGrantsCount(_to)<=MAX_GRANTS_PER_ADDRESS); //// To prevent a user being spammed and have his balance locked (out of gas attack when calculating vesting).
 
     assert(canCreateGrants[msg.sender]);

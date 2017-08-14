@@ -16,20 +16,20 @@ contract('StandardToken', function(accounts) {
 
     console.log("before all base");
 
-    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 70); // 30 extra tokens are 30% extra at sale end
+    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 100); 
     token = StandardToken.at(await sale.token());
   })
 
   it("should return the correct totalSupply after construction", async function() {
 
 
-    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 70); // 30 extra tokens are 30% extra at sale end
+    const sale = await GenaroTokenSaleTokenMock.new(accounts[0], 100); 
     token = StandardToken.at(await sale.token());
 
     let totalSupply = await token.totalSupply();
     var expected = 100;
     // expect(parseInt(totalSupply)).to.equal(expected);
-    assert.equal(totalSupply, 100);
+    assert.equal(totalSupply.toNumber(), 100);
   })
 
   it("should return the correct allowance amount after approval", async function() {
@@ -42,10 +42,10 @@ contract('StandardToken', function(accounts) {
   it("should return correct balances after transfer", async function() {
     let transfer = await token.transfer(accounts[1], 100);
     let balance0 = await token.balanceOf(accounts[0]);
-    assert.equal(balance0, 0);
+    assert.equal(balance0.toNumber(), 0);
 
     let balance1 = await token.balanceOf(accounts[1]);
-    assert.equal(balance1, 100);
+    assert.equal(balance1.toNumber(), 100);
   });
 
   it("should throw an error when trying to transfer more than balance", async function() {
@@ -62,13 +62,13 @@ contract('StandardToken', function(accounts) {
     let transferFrom = await token.transferFrom(accounts[0], accounts[2], 100, {from: accounts[1]});
 
     let balance0 = await token.balanceOf(accounts[0]);
-    assert.equal(balance0, 0);
+    assert.equal(balance0.toNumber(), 0);
 
     let balance1 = await token.balanceOf(accounts[2]);
-    assert.equal(balance1, 100);
+    assert.equal(balance1.toNumber(), 100);
 
     let balance2 = await token.balanceOf(accounts[1]);
-    assert.equal(balance2, 0);
+    assert.equal(balance2.toNumber(), 0);
   });
 
   it("should throw an error when trying to transfer more than allowed", async function() {
@@ -93,8 +93,8 @@ contract('StandardToken', function(accounts) {
     let receiver = await TokenReceiverMock.new()
     try {
       let approveAndCall = await token.approveAndCall(receiver.address, 150, '0xbeef')
-    } catch (error) {
-      return assertGas(error);
+    } catch (error) {     
+      return assertJump(error);
     }
     assert.fail('should have thrown before');
   })
